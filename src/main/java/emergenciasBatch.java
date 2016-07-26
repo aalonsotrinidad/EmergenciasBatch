@@ -74,8 +74,12 @@ public class emergenciasBatch {
 				if (objetos != null){
 					String[] objCreacion = objetos.split(",");
 					listaDatos = new ArrayList<PickList>();
+					List<PickList> listAux = null;
 					for (Integer i = 0; i<objCreacion.length; i++){
-						listaDatos.addAll(recuperarDatosDescribe(force, objCreacion[i]));	
+						listAux = recuperarDatosDescribe(force, objCreacion[i]);
+						if (listAux != null && !listAux.isEmpty()){
+							listaDatos.addAll(listAux);
+						}
 					}
 					
 				}
@@ -113,6 +117,8 @@ public class emergenciasBatch {
         post.addParameter("password", password);
         System.out.println("Intento de llamada POST");
         try {
+        	
+        	System.out.println("Request: " + post.getRequestEntity());
             httpclient.executeMethod(post);
             try {
                 JSONObject authResponse = new JSONObject(new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
@@ -190,7 +196,7 @@ public class emergenciasBatch {
 	        System.out.println("Recuperando conexión");
 	        //Conexion con los datos de postgree
 	        //connection = DriverManager.getConnection("jdbc:postgresql://ec2-23-21-102-155.compute-1.amazonaws.com:5432/d5418fkq019rpl","dhtsyocojobsrd", "cjB0mRnKEn8XeK2RBwkjAipxoJ");
-	        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres", "deloitte12");
+	        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres-Enel","postgres", "deloitte12");
 	        connection.setAutoCommit(false);
 	        System.out.println("Connectado correctamente");
 	        stmt = connection.createStatement();
